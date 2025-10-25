@@ -477,7 +477,6 @@
 //   );
 // }
 
-
 import { useState } from 'react';
 import { Check, Crown, Zap, CheckCircle2, X } from 'lucide-react';
 
@@ -513,41 +512,44 @@ export default function Pricing() {
     });
   };
 
-  // const handleSubmit = () => {
-  //   if (formData.name && formData.email && formData.phone && formData.whatsapp && formData.businessType && formData.location) {
-  //     setSubmitted(true);
-  //     // Here you would typically send the data to your backend
-  //     console.log('Order submitted:', { ...formData, plan: selectedPlan });
-  //   } else {
-  //     alert('Please fill in all required fields');
-  //   }
-  // };
-
   const handleSubmit = () => {
-  const { name, email, phone, whatsapp, businessType, location } = formData;
+    const { name, email, phone, whatsapp, businessType, location } = formData;
 
-  if (name && email && phone && whatsapp && businessType && location) {
-    setSubmitted(true);
+    if (name && email && phone && whatsapp && businessType && location) {
+      setSubmitted(true);
 
-    const message = `New Order Request:
-- Name: ${name}
-- Email: ${email}
-- Phone: ${phone}
-- WhatsApp: ${whatsapp}
-- Business Type: ${businessType}
-- Location: ${location}
-- Selected Plan: ${selectedPlan === 'onetime' ? 'One-Time Fee ($199)' : 'Monthly Plan ($15/month)'}`;
+      const planName = selectedPlan === 'onetime' ? 'One-Time Fee ($199)' : 'Monthly Plan ($15/month)';
+      
+      const message = `🎉 *New Order Request*
 
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+📋 *Order Details:*
+━━━━━━━━━━━━━━━
+👤 *Name:* ${name}
+📧 *Email:* ${email}
+📱 *Phone:* ${phone}
+💬 *WhatsApp:* ${whatsapp}
+🏢 *Business:* ${businessType}
+📍 *Location:* ${location}
+━━━━━━━━━━━━━━━
 
-    window.open(whatsappUrl, "_blank");
-  } else {
-    alert("Please fill in all required fields");
-  }
-};
+💎 *Selected Plan:* ${planName}
 
+🕐 *Order Time:* ${new Date().toLocaleString()}
+
+Thank you for choosing our service! I'm interested in getting started.`;
+
+      const encodedMessage = encodeURIComponent(message);
+      // Replace with your actual WhatsApp number (include country code without + or spaces)
+      // Example: 233123456789 for Ghana
+      const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER ;
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+      // Open WhatsApp in new tab
+      window.open(whatsappUrl, '_blank');
+    } else {
+      alert('Please fill in all required fields');
+    }
+  };
 
   const handleReset = () => {
     setSelectedPlan(null);
@@ -576,9 +578,9 @@ export default function Pricing() {
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle2 className="w-12 h-12 text-green-600" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Order Confirmed!</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Order Submitted!</h2>
             <p className="text-gray-600 mb-6">
-              Thank you, {formData.name}! We've received your order for the{' '}
+              Thank you, {formData.name}! Your order details have been sent via WhatsApp for the{' '}
               <span className="font-semibold text-gray-900">
                 {selectedPlan === 'onetime' ? 'One-Time Fee' : 'Monthly Plan'}
               </span>
@@ -591,8 +593,13 @@ export default function Pricing() {
               <p className="text-sm text-gray-700 mb-2"><span className="font-semibold">Business:</span> {formData.businessType}</p>
               <p className="text-sm text-gray-700"><span className="font-semibold">Location:</span> {formData.location}</p>
             </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+              <p className="text-sm text-amber-800">
+                💬 <strong>WhatsApp opened in a new tab.</strong> If it didn't open automatically, please check your popup blocker.
+              </p>
+            </div>
             <p className="text-sm text-gray-600 mb-6">
-              Our team will contact you shortly to complete the setup process.
+              Our team will respond to you on WhatsApp shortly to complete the setup process.
             </p>
             <button
               onClick={handleReset}
@@ -840,7 +847,7 @@ export default function Pricing() {
                     onClick={handleSubmit}
                     className="flex-1 bg-emerald-600 text-white py-4 rounded-xl font-semibold hover:bg-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg"
                   >
-                    Complete Order
+                    Send via WhatsApp
                   </button>
                 </div>
               </div>
